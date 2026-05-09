@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import CentrosPage from './pages/CentrosPage';
 import DonacionesPage from './pages/DonacionesPage';
 import NuevaDonacionPage from './pages/NuevaDonacionPage';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="donaciones/nueva" element={<NuevaDonacionPage />} />
             
             <Route path="centros" element={<CentrosPage />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             
             
           </Route>
