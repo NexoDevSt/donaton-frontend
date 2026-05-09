@@ -1,12 +1,12 @@
 /* Variables Globales de Donaton*/
 :root {
-  --color-primary: #E8720C;   /* Naranja: Botones, CTAs, íconos [cite: 116] */
-  --color-dark: #1A2E4A;      /* Azul oscuro: Navbar, headers, textos importantes [cite: 116] */
-  --color-bg: #F8F9FA;        /* Blanco suave: Fondo general [cite: 116] */
-  --color-success: #2ECC71;   /* Verde: Confirmaciones, estados completados [cite: 116] */
-  --color-danger: #E74C3C;    /* Rojo: Alertas, estados pendientes [cite: 116] */
-  --color-secondary: #6C757D; /* Gris medio: Textos secundarios [cite: 116] */
-  --font-main: 'Inter', sans-serif; /* Fuente principal [cite: 145] */
+  --color-primary: #E8720C;   /* Naranja: Botones, CTAs, íconos  */
+  --color-dark: #1A2E4A;      /* Azul oscuro: Navbar, headers, textos importantes  */
+  --color-bg: #F8F9FA;        /* Blanco suave: Fondo general  */
+  --color-success: #2ECC71;   /* Verde: Confirmaciones, estados completados  */
+  --color-danger: #E74C3C;    /* Rojo: Alertas, estados pendientes  */
+  --color-secondary: #6C757D; /* Gris medio: Textos secundarios : */
+  --font-main: 'Inter', sans-serif; /* Fuente principal  */
 }
 
 /* Estilos Base*/
@@ -29,7 +29,7 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
-/* Botón Global Reutilizable [cite: 124] */
+/* Botón Global Reutilizable */
 .btn-primary {
   background-color: var(--color-primary);
   color: white;
