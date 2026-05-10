@@ -1,13 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080", 
-  headers: { "Content-Type": "application/json" },
+  baseURL: 'http://localhost:8080', 
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
-// Agrega el token a cada peticion q haga
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

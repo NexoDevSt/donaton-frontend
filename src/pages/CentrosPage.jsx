@@ -1,37 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../services/axiosConfig'; // Importamos tu configuración
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import './CentrosPage.css';
 
 const CentrosPage = () => {
-  // Datos de prueba (hardcoded) mientras Alexis termina el BFF
-  const centrosPrueba = [
-    { id: 1, nombre: "Centro Melipilla", direccion: "Ortúzar 456", region: "Metropolitana", activo: true },
-    { id: 2, nombre: "Centro Talagante", direccion: "Bernardo O'Higgins 12", region: "Metropolitana", activo: false }
-  ];
+  const [centros, setCentros] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Definimos la función para traer datos
+    const fetchCentros = async () => {
+      try {
+        console.log("Intentando conectar al Gateway en el puerto 8080...");
+        
+        // Llamada al endpoint a través del BFF
+        const response = await axiosInstance.get('/gateway/centros');
+        
+        // ESTE ES EL CONSOLE LOG QUE NECESITAS
+        console.log("¡Conexión exitosa! Datos recibidos de Yesenia:", response.data);
+        
+        setCentros(response.data);
+      } catch (error) {
+        // Si sale error, aquí veremos por qué (CORS, 404, 500, etc.)
+        console.error("Error en la integración:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCentros();
+  }, []);
+
+  if (loading) return <div className="centros-container">Cargando centros desde el servidor...</div>;
 
   return (
     <div className="centros-container">
       <div className="centros-header">
-        <h1>Centros de Acopio</h1>
-        <p>Encuentra el lugar más cercano para entregar tu ayuda.</p>
+        <h1>Centros de Acopio (Datos Reales)</h1>
       </div>
 
       <div className="centros-grid">
-        {centrosPrueba.map(centro => (
-          <Card key={centro.id}>
-            <div className="centro-info">
-              <h3>{centro.nombre}</h3>
-              <p><strong>Dirección:</strong> {centro.direccion}</p>
-              <p><strong>Región:</strong> {centro.region}</p>
-            </div>
-            <div className="centro-footer">
-              <Badge variant={centro.activo ? "bodega" : "distribuida"}>
-                {centro.activo ? "ACTIVO" : "INACTIVO"}
-              </Badge>
-            </div>
-          </Card>
-        ))}
+        {centros.length > 0 ? (
+          centros.map(centro => (
+            <Card key={centro.id}>
+              <div className="centro-info">
+                <h3>{centro.nombre}</h3>
+                <p><strong>Dirección:</strong> {centro.direccion}</p>
+                <p><strong>Región:</strong> {centro.region}</p>
+              </div>
+              <div className="centro-footer">
+                <Badge variant={centro.activo ? "bodega" : "distribuida"}>
+                  {centro.activo ? "ACTIVO" : "INACTIVO"}
+                </Badge>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <p>No se encontraron centros en la base de datos de Yesenia.</p>
+        )}
       </div>
     </div>
   );
