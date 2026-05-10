@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Importamos el contexto
+import { useAuth } from '../context/AuthContext'; 
 import { getCentros, registrarDonacion } from '../services/donacionService';
 import Button from '../components/ui/Button';
 import toast from 'react-hot-toast';
@@ -8,7 +8,7 @@ import './NuevaDonacionPage.css';
 
 const NuevaDonacionPage = () => {
   const navigate = useNavigate();
-  const { usuario } = useAuth(); // Obtenemos el usuario logueado
+  const { usuario } = useAuth(); 
   const [centros, setCentros] = useState([]);
   const [loading, setLoading] = useState(false);
   
@@ -18,7 +18,7 @@ const NuevaDonacionPage = () => {
     cantidad: '',
     unidad: '',
     centroAcopioId: '',
-    origen: 'Plataforma Web' // Valor por defecto para el DTO
+    origen: 'Plataforma Web' 
   });
 
   useEffect(() => {
@@ -42,24 +42,25 @@ const NuevaDonacionPage = () => {
     setLoading(true);
 
     try {
-      // Validamos que el usuario exista (por seguridad)
-      if (!usuario || !usuario.id) {
-        toast.error("Debes estar logueado para donar");
+      // AJUSTE CLAVE: Usamos usuario.usuarioId según lo que devolvió tu backend
+      if (!usuario || !usuario.usuarioId) {
+        toast.error("Error: No se encontró tu ID de usuario. Reintenta el login.");
+        setLoading(false);
         return;
       }
 
-      // Construimos el Payload exacto para el DTO de Yesenia
+      // Payload exacto para el DTO de Yesenia
       const payload = {
         recurso: donacion.recurso,
         categoria: donacion.categoria,
-        cantidad: parseInt(donacion.cantidad), // Obligatorio: Integer
+        cantidad: parseInt(donacion.cantidad), 
         unidad: donacion.unidad,
         origen: donacion.origen,
-        centroAcopioId: parseInt(donacion.centroAcopioId), // Obligatorio: Long
-        donadorId: parseInt(usuario.id) // Obligatorio: Long (lo sacamos del login)
+        centroAcopioId: parseInt(donacion.centroAcopioId), 
+        donadorId: parseInt(usuario.usuarioId) // <--- Cambiado de .id a .usuarioId
       };
 
-      console.log("Enviando payload validado al Gateway:", payload);
+      console.log("Enviando donación validada:", payload);
       
       await registrarDonacion(payload);
       
@@ -67,9 +68,8 @@ const NuevaDonacionPage = () => {
       navigate('/donaciones');
       
     } catch (error) {
-      console.error("Error 400 - Detalles de validación:", error.response?.data);
-      // Si hay errores de validación (NotNull/NotBlank), Spring los manda aquí
-      const mensaje = error.response?.data?.mensaje || "Error al validar los campos";
+      console.error("Detalles del error:", error.response?.data);
+      const mensaje = error.response?.data?.mensaje || "Error al registrar la donación";
       toast.error(mensaje);
     } finally {
       setLoading(false);
@@ -125,7 +125,7 @@ const NuevaDonacionPage = () => {
 
           <div className="form-group full-width" style={{ marginTop: '10px' }}>
             <Button type="submit" variant="primary" style={{ width: '100%' }} disabled={loading}>
-              {loading ? "Procesando..." : "Registrar Donación"}
+              {loading ? "Registrando..." : "Registrar Donación"}
             </Button>
           </div>
         </form>
