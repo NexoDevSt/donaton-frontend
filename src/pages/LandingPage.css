@@ -1,0 +1,62 @@
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Sección Hero */
+.hero {
+  background-color: var(--color-dark);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 40px;
+  max-width: 750px;
+  color: #e0e0e0;
+}
+
+/* Sección de Estadísticas */
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 80px 20px;
+  background-color: white;
+  gap: 30px;
+}
+
+.stat-card {
+  text-align: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.stat-icon {
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  color: var(--color-dark);
+  display: block;
+  font-weight: 700;
+}
+
+.stat-label {
+  color: var(--color-secondary);
+  font-size: 1.1rem;
+}
