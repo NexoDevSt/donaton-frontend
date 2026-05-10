@@ -1,86 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { getDonacionesByUser } from '../services/donacionService';
-import Badge from '../components/ui/Badge'; 
-import Button from '../components/ui/Button';
-import './DonacionesPage.css';
+import { useAuth } from '../context/AuthContext';
+import Card from '../components/ui/Card';
+import './DashboardPage.css';
 
-const DonacionesPage = () => {
+const DashboardPage = () => {
   const { usuario } = useAuth();
-  const [donaciones, setDonaciones] = useState([]);
+  const [stats, setStats] = useState({ total: 0, kilos: 0, grafico: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cargarMisDonaciones = async () => {
-      if (usuario && usuario.usuarioId) {
-        try {
-          const data = await getDonacionesByUser(usuario.usuarioId);
-          setDonaciones(data);
-        } catch (error) {
-          console.error("Error al cargar donaciones:", error);
-        } finally {
-          setLoading(false);
-        }
+    const procesarDatos = async () => {
+      try {
+        const donaciones = await getDonacionesByUser(usuario.usuarioId);
+        
+        const total = donaciones.length;
+
+        const totalKilos = donaciones
+          .filter(d => d.unidad?.toLowerCase() === 'kg')
+          .reduce((acc, curr) => acc + (Number(curr.cantidad) || 0), 0);
+
+        const agrupado = donaciones.reduce((acc, curr) => {
+          const cat = curr.categoria || 'OTROS';
+          acc[cat] = (acc[cat] || 0) + 1; 
+          return acc;
+        }, {});
+
+        const datosFormateados = Object.keys(agrupado).map(key => ({
+          name: key.replace(/_/g, ' '),
+          cantidad: agrupado[key]
+        }));
+
+        setStats({ total, kilos: totalKilos, grafico: datosFormateados });
+      } catch (error) {
+        console.error("Error cargando dashboard:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    cargarMisDonaciones();
+
+    if (usuario?.usuarioId) procesarDatos();
   }, [usuario]);
 
-  if (loading) return <div className="donaciones-container"><p>Cargando tus donaciones...</p></div>;
+  if (loading) return <p>Cargando panel...</p>;
 
   return (
-    <div className="donaciones-container">
-      <div className="donaciones-header">
-        <h1>Mis Donaciones</h1>
-        <Link to="/donaciones/nueva">
-          <Button variant="primary">Nueva Donación</Button>
-        </Link>
+    <div className="dashboard-container">
+      <h1>Panel de Control</h1>
+      
+      <div className="stats-grid">
+        <Card className="stat-card">
+          <h3>Mis Donaciones</h3>
+          <p className="stat-value">{stats.total}</p>
+        </Card>
+        <Card className="stat-card">
+          <h3>Total Kilos (Aportados)</h3>
+          <p className="stat-value">{stats.kilos} kg</p>
+        </Card>
       </div>
 
-      <div className="filtros-bar">
-        <select className="form-input">
-          <option value="">Todas las categorías</option>
-          <option value="ALIMENTO_NO_PERECIBLE">Alimentos</option>
-          <option value="ROPA">Ropa</option>
-          <option value="INSUMO_MEDICO">Insumos Médicos</option>
-        </select>
-      </div>
-
-      <table className="tabla-donaciones">
-        <thead>
-          <tr>
-            <th>Recurso</th>
-            <th>Categoría</th>
-            <th>Cantidad</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {donaciones.length > 0 ? (
-            donaciones.map(d => (
-              <tr key={d.id}>
-                <td>{d.recurso}</td>
-                <td>{d.categoria ? d.categoria.replace(/_/g, ' ') : 'N/A'}</td>
-                <td>{d.cantidad} {d.unidad}</td>
-                <td>
-                  <Badge variant={d.estado === 'RECIBIDA' ? 'recibida' : 'bodega'}>
-                    {d.estado || 'PENDIENTE'}
-                  </Badge>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>
-                No has realizado donaciones todavía.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <Card className="chart-card">
+        <h3>Distribución por Categoría</h3>
+        <div style={{ width: '100%', height: 300 }}>
+          <ResponsiveContainer>
+            <BarChart data={stats.grafico}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="cantidad" fill="#E8720C" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
     </div>
   );
 };
 
-export default DonacionesPage;
+export default DashboardPage;
