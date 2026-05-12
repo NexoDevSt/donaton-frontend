@@ -1,81 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { getDonacionesByUser } from '../services/donacionService';
-import { useAuth } from '../context/AuthContext';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import Card from '../components/ui/Card';
-import './DashboardPage.css';
+import Button from '../components/ui/Button';
+import { FaBoxOpen, FaMapMarkerAlt, FaCheckCircle, FaClipboardList } from 'react-icons/fa';
+import './DonacionesPage.css';
 
-const DashboardPage = () => {
-  const { usuario } = useAuth();
-  const [stats, setStats] = useState({ total: 0, kilos: 0, grafico: [] });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const procesarDatos = async () => {
-      try {
-        const donaciones = await getDonacionesByUser(usuario.usuarioId);
-        
-        const total = donaciones.length;
-
-        const totalKilos = donaciones
-          .filter(d => d.unidad?.toLowerCase() === 'kg')
-          .reduce((acc, curr) => acc + (Number(curr.cantidad) || 0), 0);
-
-        const agrupado = donaciones.reduce((acc, curr) => {
-          const cat = curr.categoria || 'OTROS';
-          acc[cat] = (acc[cat] || 0) + 1; 
-          return acc;
-        }, {});
-
-        const datosFormateados = Object.keys(agrupado).map(key => ({
-          name: key.replace(/_/g, ' '),
-          cantidad: agrupado[key]
-        }));
-
-        setStats({ total, kilos: totalKilos, grafico: datosFormateados });
-      } catch (error) {
-        console.error("Error cargando dashboard:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (usuario?.usuarioId) procesarDatos();
-  }, [usuario]);
-
-  if (loading) return <p>Cargando panel...</p>;
+const DonacionesPage = () => {
+  const pasos = [
+    {
+      icon: <FaClipboardList size={30} />,
+      titulo: "1. Identifica qué puedes donar",
+      descripcion: "Aceptamos alimentos no perecibles, ropa en buen estado e insumos médicos básicos."
+    },
+    {
+      icon: <FaBoxOpen size={30} />,
+      titulo: "2. Prepara tu donación",
+      descripcion: "Asegúrate de que los productos no estén vencidos y la ropa esté limpia y embolsada."
+    },
+    {
+      icon: <FaMapMarkerAlt size={30} />,
+      titulo: "3. Elige un Centro de Acopio",
+      descripcion: "Revisa nuestra lista de centros activos para encontrar el más cercano a tu ubicación."
+    },
+    {
+      icon: <FaCheckCircle size={30} />,
+      titulo: "4. Registra el envío",
+      descripcion: "Completa el formulario en nuestra plataforma para generar el registro de tu aporte."
+    }
+  ];
 
   return (
-    <div className="dashboard-container">
-      <h1>Panel de Control</h1>
-      
-      <div className="stats-grid">
-        <Card className="stat-card">
-          <h3>Mis Donaciones</h3>
-          <p className="stat-value">{stats.total}</p>
-        </Card>
-        <Card className="stat-card">
-          <h3>Total Kilos (Aportados)</h3>
-          <p className="stat-value">{stats.kilos} kg</p>
-        </Card>
+    <div className="guia-donacion-container">
+      <div className="guia-header">
+        <h1>¿Cómo realizar una donación?</h1>
+        <p>Sigue estos sencillos pasos para que tu ayuda llegue a quienes más la necesitan.</p>
       </div>
 
-      <Card className="chart-card">
-        <h3>Distribución por Categoría</h3>
-        <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer>
-            <BarChart data={stats.grafico}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="cantidad" fill="#E8720C" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
+      <div className="pasos-grid">
+        {pasos.map((paso, index) => (
+          <Card key={index} className="paso-card">
+            <div className="paso-icon-container">{paso.icon}</div>
+            <h3>{paso.titulo}</h3>
+            <p>{paso.descripcion}</p>
+          </Card>
+        ))}
+      </div>
+
+      <div className="guia-footer">
+        <Card className="cta-card">
+          <h2>¿Listo para ayudar?</h2>
+          <p>Ya puedes registrar tu donación en nuestro sistema de forma rápida y segura.</p>
+          <div className="cta-buttons">
+            <Link to="/nueva-donacion">
+              <Button variant="primary">Registrar Donación Ahora</Button>
+            </Link>
+            <Link to="/centros">
+              <Button variant="secondary">Ver Centros de Acopio</Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };
 
-export default DashboardPage;
+export default DonacionesPage;

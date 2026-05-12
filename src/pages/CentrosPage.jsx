@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../services/axiosConfig'; // Importamos tu configuración
+import axiosInstance from '../services/axiosConfig'; 
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import './CentrosPage.css';
@@ -9,20 +9,16 @@ const CentrosPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Definimos la función para traer datos
     const fetchCentros = async () => {
       try {
         console.log("Intentando conectar al Gateway en el puerto 8080...");
         
-        // Llamada al endpoint a través del BFF
         const response = await axiosInstance.get('/gateway/centros');
         
-        // ESTE ES EL CONSOLE LOG QUE NECESITAS
         console.log("¡Conexión exitosa! Datos recibidos de Yesenia:", response.data);
         
         setCentros(response.data);
       } catch (error) {
-        // Si sale error, aquí veremos por qué (CORS, 404, 500, etc.)
         console.error("Error en la integración:", error);
       } finally {
         setLoading(false);

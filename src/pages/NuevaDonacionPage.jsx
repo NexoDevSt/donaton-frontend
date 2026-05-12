@@ -42,14 +42,12 @@ const NuevaDonacionPage = () => {
     setLoading(true);
 
     try {
-      // AJUSTE CLAVE: Usamos usuario.usuarioId según lo que devolvió tu backend
       if (!usuario || !usuario.usuarioId) {
         toast.error("Error: No se encontró tu ID de usuario. Reintenta el login.");
         setLoading(false);
         return;
       }
 
-      // Payload exacto para el DTO de Yesenia
       const payload = {
         recurso: donacion.recurso,
         categoria: donacion.categoria,
@@ -57,11 +55,10 @@ const NuevaDonacionPage = () => {
         unidad: donacion.unidad,
         origen: donacion.origen,
         centroAcopioId: parseInt(donacion.centroAcopioId), 
-        donadorId: parseInt(usuario.usuarioId) // <--- Cambiado de .id a .usuarioId
+        donadorId: parseInt(usuario.usuarioId)
       };
 
       console.log("Enviando donación validada:", payload);
-      
       await registrarDonacion(payload);
       
       toast.success("¡Donación registrada con éxito!");
@@ -81,14 +78,29 @@ const NuevaDonacionPage = () => {
       <div className="form-card">
         <h2 style={{ marginBottom: '20px', color: 'var(--color-dark)' }}>Nueva Donación</h2>
         <form onSubmit={handleSubmit} className="form-grid">
+          
           <div className="form-group full-width">
-            <label>Recurso (ej: Arroz, Gasas, Mantas)</label>
-            <input type="text" name="recurso" className="form-input" onChange={handleChange} required />
+            {/* Agregado htmlFor e id para que el test encuentre el input */}
+            <label htmlFor="recurso">Recurso (ej: Arroz, Gasas, Mantas)</label>
+            <input 
+              id="recurso"
+              type="text" 
+              name="recurso" 
+              className="form-input" 
+              onChange={handleChange} 
+              required 
+            />
           </div>
 
           <div className="form-group">
-            <label>Categoría</label>
-            <select name="categoria" className="form-input" onChange={handleChange} value={donacion.categoria}>
+            <label htmlFor="categoria">Categoría</label>
+            <select 
+              id="categoria"
+              name="categoria" 
+              className="form-input" 
+              onChange={handleChange} 
+              value={donacion.categoria}
+            >
               <option value="ALIMENTO_NO_PERECIBLE">Alimento</option>
               <option value="ROPA">Ropa</option>
               <option value="INSUMO_MEDICO">Insumo Médico</option>
@@ -96,18 +108,33 @@ const NuevaDonacionPage = () => {
           </div>
 
           <div className="form-group">
-            <label>Unidad (kg, unidades, cajas)</label>
-            <input type="text" name="unidad" className="form-input" onChange={handleChange} required />
+            <label htmlFor="unidad">Unidad (kg, unidades, cajas)</label>
+            <input 
+              id="unidad"
+              type="text" 
+              name="unidad" 
+              className="form-input" 
+              onChange={handleChange} 
+              required 
+            />
           </div>
 
           <div className="form-group">
-            <label>Cantidad</label>
-            <input type="number" name="cantidad" className="form-input" onChange={handleChange} required />
+            <label htmlFor="cantidad">Cantidad</label>
+            <input 
+              id="cantidad"
+              type="number" 
+              name="cantidad" 
+              className="form-input" 
+              onChange={handleChange} 
+              required 
+            />
           </div>
 
           <div className="form-group">
-            <label>Centro de Acopio</label>
+            <label htmlFor="centroAcopioId">Centro de Acopio</label>
             <select 
+              id="centroAcopioId"
               name="centroAcopioId" 
               className="form-input" 
               onChange={handleChange} 

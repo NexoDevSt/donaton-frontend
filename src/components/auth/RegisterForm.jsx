@@ -28,9 +28,6 @@ const RegisterForm = () => {
       console.log("Registro exitoso en el backend:", data);
       setMensaje({ texto: '¡Cuenta creada con éxito!', tipo: 'success' });
       
-      // Opcional: Limpiar el formulario tras éxito
-      // setFormData({ nombre: '', email: '', password: '', rol: 'DONANTE' });
-      
     } catch (error) {
       console.error("Error al registrar:", error);
       const errorMsg = error.response?.data?.mensaje || "No se pudo conectar con el servidor";
@@ -51,8 +48,10 @@ const RegisterForm = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Nombre Completo</label>
+          {/* Vinculamos el label al input mediante reg-nombre */}
+          <label htmlFor="reg-nombre">Nombre Completo</label>
           <input 
+            id="reg-nombre"
             type="text" 
             name="nombre" 
             className="form-input" 
@@ -62,8 +61,9 @@ const RegisterForm = () => {
           />
         </div>
         <div className="form-group">
-          <label>Email</label>
+          <label htmlFor="reg-email">Email</label>
           <input 
+            id="reg-email"
             type="email" 
             name="email" 
             className="form-input" 
@@ -73,8 +73,9 @@ const RegisterForm = () => {
           />
         </div>
         <div className="form-group">
-          <label>Contraseña</label>
+          <label htmlFor="reg-password">Contraseña</label>
           <input 
+            id="reg-password"
             type="password" 
             name="password" 
             className="form-input" 
@@ -84,8 +85,14 @@ const RegisterForm = () => {
           />
         </div>
         <div className="form-group">
-          <label>Rol</label>
-          <select name="rol" className="form-input" value={formData.rol} onChange={handleChange}>
+          <label htmlFor="reg-rol">Rol</label>
+          <select 
+            id="reg-rol"
+            name="rol" 
+            className="form-input" 
+            value={formData.rol} 
+            onChange={handleChange}
+          >
             <option value="DONANTE">Donante</option>
             <option value="VOLUNTARIO">Voluntario</option>
           </select>

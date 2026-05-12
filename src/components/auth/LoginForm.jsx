@@ -23,7 +23,6 @@ const LoginForm = () => {
       
       console.log("Respuesta completa del servidor:", data);
 
- 
       const usuarioParaGuardar = data.user ? data.user : data;
       const tokenParaGuardar = data.token;
 
@@ -48,8 +47,10 @@ const LoginForm = () => {
       <h2 className="auth-form-title">Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Email</label>
+          {/* El htmlFor se vincula con el id del input para los tests */}
+          <label htmlFor="login-email">Email</label>
           <input 
+            id="login-email"
             type="email" 
             name="email" 
             className="form-input" 
@@ -59,8 +60,9 @@ const LoginForm = () => {
           />
         </div>
         <div className="form-group">
-          <label>Contraseña</label>
+          <label htmlFor="login-password">Contraseña</label>
           <input 
+            id="login-password"
             type="password" 
             name="password" 
             className="form-input" 
