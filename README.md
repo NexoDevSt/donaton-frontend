@@ -49,7 +49,8 @@ src/
 │   ├── LandingPage.jsx / .css / .test.jsx
 │   ├── LoginPage.jsx / .css / .test.jsx
 │   ├── NuevaDonacionPage.jsx / .css / .test.jsx
-│   └── RegisterPage.jsx
+│   ├── RegisterPage.jsx
+├   └── MisDonacionesPage.jsx/.css/.test.jsx
 ├── services/           # Capa de Comunicación (Axios)
 │   ├── authService.js / .test.js
 │   ├── axiosConfig.js / .test.js
