@@ -1,25 +1,44 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { login as loginService } from '../../services/authService';
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import './AuthForm.css';
 
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulación de login por ahora
-    if (credentials.email && credentials.password) {
+    
+    try {
+      const data = await loginService(credentials);
+      
+      console.log("Respuesta completa del servidor:", data);
+
+      const usuarioParaGuardar = data.user ? data.user : data;
+      const tokenParaGuardar = data.token;
+
+      if (!tokenParaGuardar) {
+        throw new Error("El servidor no devolvió un token");
+      }
+
+      login(usuarioParaGuardar, tokenParaGuardar); 
+      
       toast.success("¡Bienvenido a Donaton!");
-      console.log("Login exitoso");
-    } else {
-      toast.error("Credenciales inválidas");
+      navigate('/');
+      
+    } catch (error) {
+      console.error("Error en login:", error);
+      const mensaje = error.response?.data?.mensaje || "Credenciales inválidas";
+      toast.error(mensaje);
     }
   };
 
@@ -28,12 +47,29 @@ const LoginForm = () => {
       <h2 className="auth-form-title">Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Email</label>
-          <input type="email" name="email" className="form-input" onChange={handleChange} required />
+          {/* El htmlFor se vincula con el id del input para los tests */}
+          <label htmlFor="login-email">Email</label>
+          <input 
+            id="login-email"
+            type="email" 
+            name="email" 
+            className="form-input" 
+            value={credentials.email}
+            onChange={handleChange} 
+            required 
+          />
         </div>
         <div className="form-group">
-          <label>Contraseña</label>
-          <input type="password" name="password" className="form-input" onChange={handleChange} required />
+          <label htmlFor="login-password">Contraseña</label>
+          <input 
+            id="login-password"
+            type="password" 
+            name="password" 
+            className="form-input" 
+            value={credentials.password}
+            onChange={handleChange} 
+            required 
+          />
         </div>
         <Button type="submit" variant="primary" style={{ width: '100%' }}>
           Ingresar

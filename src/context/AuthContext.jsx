@@ -1,29 +1,71 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
-const AuthContext = createContext();
+export const AuthContext = createContext(); 
 
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(
-    JSON.parse(localStorage.getItem("usuario")) || null
-  );
+  const [usuario, setUsuario] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (datos, token) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("usuario", JSON.stringify(datos)); 
-    setUsuario(datos);
+  useEffect(() => {
+    const cargarDatos = () => {
+      try {
+        const usuarioGuardado = localStorage.getItem("usuario");
+        const tokenGuardado = localStorage.getItem("token");
+
+        if (usuarioGuardado && usuarioGuardado !== "undefined" && tokenGuardado && tokenGuardado !== "undefined") {
+          setUsuario(JSON.parse(usuarioGuardado));
+          setToken(tokenGuardado);
+        } else {
+          logout();
+        }
+      } catch (error) {
+        console.error("Error al cargar datos de sesión:", error);
+        logout(); 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarDatos();
+  }, []);
+
+  const login = (datos, tokenRecibido) => {
+    if (!datos || !tokenRecibido) {
+      console.error("No se pueden guardar datos de login indefinidos");
+      return;
+    }
+
+    // NORMALIZACIÓN: Unificamos las propiedades de Donantes y Voluntarios
+    const usuarioNormalizado = {
+      ...datos,
+      // Aseguramos que siempre exista usuarioId
+      usuarioId: datos.usuarioId || datos.id || datos.voluntarioId,
+      // Aseguramos que siempre exista nombre
+      nombre: datos.nombre || datos.nombreVoluntario || datos.nombre_completo || "Usuario"
+    };
+
+    localStorage.setItem("token", tokenRecibido);
+    localStorage.setItem("usuario", JSON.stringify(usuarioNormalizado));
+    
+    setToken(tokenRecibido);
+    setUsuario(usuarioNormalizado);
   };
 
   const logout = () => {
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
     localStorage.removeItem("usuario");
     setUsuario(null);
+    setToken(null);
   };
 
+  if (loading) return null;
+
   return (
-    <AuthContext.Provider value={{ usuario, login, logout }}>
+    <AuthContext.Provider value={{ usuario, token, login, logout, isAuthenticated: !!usuario }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext); 
+export const useAuth = () => useContext(AuthContext);

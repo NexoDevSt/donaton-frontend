@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaHandHoldingHeart } from 'react-icons/fa';
+import { FaHandHoldingHeart, FaUserCircle } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -26,11 +26,19 @@ const Navbar = () => {
         
         {usuario ? (
           <>
-            <Link to="/dashboard" className="nav-link">Dashboard</Link>
-            <Link to="/donaciones" className="nav-link">Mis Donaciones</Link>
-            <button onClick={handleLogout} className="nav-btn-login">
-              Cerrar Sesión
-            </button>
+            <Link to="/donaciones" className="nav-link">Como donar</Link>
+            <Link to="/donaciones/nueva" className="nav-link">Nueva Donación</Link>
+            <Link to="/mis-donaciones" className="nav-link">Mi Historial</Link>
+            
+            <div className="user-info-display" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '15px' }}>
+              <FaUserCircle size={20} color="var(--color-primary)" />
+              <span className="nav-link" style={{ fontWeight: 'bold', color: 'var(--color-secondary)' }}>
+                {usuario.nombre}
+              </span>
+              <button onClick={handleLogout} className="nav-btn-login" style={{ marginLeft: '10px' }}>
+                Salir
+              </button>
+            </div>
           </>
         ) : (
           <Link to="/login">
