@@ -9,6 +9,8 @@ import CentrosPage from './pages/CentrosPage';
 import DonacionesPage from './pages/DonacionesPage';
 import NuevaDonacionPage from './pages/NuevaDonacionPage';
 import DashboardPage from './pages/DashboardPage';
+import MisDonacionesPage from './pages/MisDonacionesPage';
+import './App.css';
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
             
             <Route path="centros" element={<CentrosPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="mis-donaciones" element={<MisDonacionesPage />} />
             
             
           </Route>

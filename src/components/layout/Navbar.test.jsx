@@ -35,7 +35,7 @@ describe('Componente Navbar', () => {
     renderNavbar(null);
     
     expect(screen.getByText(/ingresar/i)).toBeInTheDocument();
-    expect(screen.queryByText(/mis donaciones/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/mi historial/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/salir/i)).not.toBeInTheDocument();
   });
 
@@ -44,9 +44,13 @@ describe('Componente Navbar', () => {
     renderNavbar(usuarioMock);
 
     expect(screen.getByText('Matias')).toBeInTheDocument();
-    expect(screen.getByText(/mis donaciones/i)).toBeInTheDocument();
+    
+    expect(screen.getByText(/mi historial/i)).toBeInTheDocument();
+    
     expect(screen.getByText(/nueva donación/i)).toBeInTheDocument();
+    expect(screen.getByText(/como donar/i)).toBeInTheDocument();
     expect(screen.getByText(/salir/i)).toBeInTheDocument();
+    
     expect(screen.queryByText(/ingresar/i)).not.toBeInTheDocument();
   });
 
@@ -54,18 +58,16 @@ describe('Componente Navbar', () => {
     const usuarioMock = { nombre: 'Matias' };
     renderNavbar(usuarioMock);
 
-    const btnSalir = screen.getByText(/salir/i);
+    const btnSalir = screen.getByRole('button', { name: /salir/i });
     fireEvent.click(btnSalir);
 
-    // Verificamos que se llame a la función logout del contexto
     expect(mockLogout).toHaveBeenCalledTimes(1);
-    // Verificamos que se redirija a la raíz
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
   test('el logo debe redirigir a la página de inicio', () => {
     renderNavbar(null);
     const logoLink = screen.getByRole('link', { name: /donaton/i });
-    expect(logoLink.getAttribute('href')).toBe('/');
+    expect(logoLink).toHaveAttribute('href', '/');
   });
 });

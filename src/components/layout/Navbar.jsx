@@ -26,8 +26,9 @@ const Navbar = () => {
         
         {usuario ? (
           <>
-            <Link to="/donaciones" className="nav-link">Mis Donaciones</Link>
+            <Link to="/donaciones" className="nav-link">Como donar</Link>
             <Link to="/donaciones/nueva" className="nav-link">Nueva Donación</Link>
+            <Link to="/mis-donaciones" className="nav-link">Mi Historial</Link>
             
             <div className="user-info-display" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '15px' }}>
               <FaUserCircle size={20} color="var(--color-primary)" />
