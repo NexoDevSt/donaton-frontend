@@ -13,6 +13,22 @@ const Navbar = () => {
     navigate('/');
   };
 
+  // PARCHE TEMPORAL: Como el backend no envía el campo 'rol', lo detectamos por su correo o nombre
+  const esAdmin = usuario && (
+    usuario.email === 'admin@donaton.cl' || 
+    usuario.nombre?.toLowerCase().includes('admin')
+  );
+
+  const handleNecesidadesNavegacion = (e) => {
+    e.preventDefault();
+    
+    if (esAdmin) {
+      navigate('/necesidades/crear');
+    } else {
+      navigate('/necesidades');
+    }
+  };
+
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-logo">
@@ -24,9 +40,24 @@ const Navbar = () => {
         <Link to="/" className="nav-link">Inicio</Link>
         <Link to="/centros" className="nav-link">Centros</Link>
         
+        <a 
+          href="/necesidades" 
+          onClick={handleNecesidadesNavegacion} 
+          className="nav-link"
+        >
+          Necesidades
+        </a>
+        
         {usuario ? (
           <>
-            <Link to="/donaciones" className="nav-link">Mis Donaciones</Link>
+            {/* Opciones ocultas si se detecta que eres Admin */}
+            {!esAdmin && (
+              <>
+                <Link to="/donaciones" className="nav-link">Como donar</Link>
+                <Link to="/donaciones/nueva" className="nav-link">Nueva Donación</Link>
+                <Link to="/mis-donaciones" className="nav-link">Mi Historial</Link>
+              </>
+            )}
             
             <div className="user-info-display" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '15px' }}>
               <FaUserCircle size={20} color="var(--color-primary)" />

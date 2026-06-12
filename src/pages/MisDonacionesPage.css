@@ -1,0 +1,106 @@
+.historial-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: calc(100vh - 160px);
+}
+
+.historial-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.historial-header h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.historial-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Contenedor de las tarjetas */
+.historial-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* Estilo de la tarjeta individual */
+.donacion-item-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 5px solid #E8720C; /* El naranja característico de Donatón */
+}
+
+.donacion-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.donacion-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  color: #2c3e50;
+}
+
+.donacion-meta {
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 1rem;
+}
+
+.donacion-date {
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+/* Contenedor de Badges */
+.donacion-status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+/* Estado de carga */
+.loader {
+  text-align: center;
+  padding: 100px;
+  font-size: 1.2rem;
+  color: #E8720C;
+  font-weight: bold;
+}
+
+/* Estado vacío */
+.no-data-card {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+  background-color: #f9f9f9;
+  border: 2px dashed #ccc;
+}
+
+.no-data-card p {
+  color: #777;
+  font-size: 1.2rem;
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+  .historial-header h1 {
+    font-size: 2rem;
+  }
+  
+  .historial-grid {
+    grid-template-columns: 1fr;
+  }
+}

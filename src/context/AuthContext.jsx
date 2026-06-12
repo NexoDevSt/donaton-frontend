@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 
-const AuthContext = createContext();
+export const AuthContext = createContext(); 
 
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
@@ -36,11 +36,20 @@ export function AuthProvider({ children }) {
       return;
     }
 
+    // NORMALIZACIÓN: Unificamos las propiedades de Donantes y Voluntarios
+    const usuarioNormalizado = {
+      ...datos,
+      // Aseguramos que siempre exista usuarioId
+      usuarioId: datos.usuarioId || datos.id || datos.voluntarioId,
+      // Aseguramos que siempre exista nombre
+      nombre: datos.nombre || datos.nombreVoluntario || datos.nombre_completo || "Usuario"
+    };
+
     localStorage.setItem("token", tokenRecibido);
-    localStorage.setItem("usuario", JSON.stringify(datos));
+    localStorage.setItem("usuario", JSON.stringify(usuarioNormalizado));
     
     setToken(tokenRecibido);
-    setUsuario(datos);
+    setUsuario(usuarioNormalizado);
   };
 
   const logout = () => {

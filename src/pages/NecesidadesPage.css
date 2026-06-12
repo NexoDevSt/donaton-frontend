@@ -1,0 +1,130 @@
+/* Contenedor Principal */
+.necesidades-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Encabezado */
+.necesidades-header {
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+
+.necesidades-header h1 {
+  font-size: 2.5rem;
+  color: var(--color-secondary, #2c3e50);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.necesidades-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Grid de Tarjetas (Responsivo automático) */
+.necesidades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+/* Tarjeta Individual (Extensión sobre el componente Card) */
+.necesidad-item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.necesidad-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Información del recurso */
+.necesidad-info h3 {
+  font-size: 1.3rem;
+  color: #333;
+  margin: 0 0 12px 0;
+  text-transform: capitalize;
+}
+
+.necesidad-info p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.necesidad-info strong {
+  color: #222;
+}
+
+/* Contenedor del Badge */
+.necesidad-status {
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+/* Estados de Carga (Loader) */
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: var(--color-primary, #E8720C);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Estados de Error (Fallback Activo) */
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.error-card {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  padding: 35px !important;
+  border-top: 5px solid #e74c3c !important;
+  background-color: #fff;
+}
+
+.error-card h2 {
+  color: #e74c3c;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.error-card p {
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Animación de entrada fluida */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
