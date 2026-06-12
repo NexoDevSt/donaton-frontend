@@ -10,6 +10,8 @@ import DonacionesPage from './pages/DonacionesPage';
 import NuevaDonacionPage from './pages/NuevaDonacionPage';
 import DashboardPage from './pages/DashboardPage';
 import MisDonacionesPage from './pages/MisDonacionesPage';
+import NecesidadesPage from './pages/NecesidadesPage';
+import CrearNecesidadPage from './pages/CrearNecesidadPage';
 import './App.css';
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
             <Route path="centros" element={<CentrosPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="mis-donaciones" element={<MisDonacionesPage />} />
+            <Route path="necesidades" element={<NecesidadesPage />} />
+            <Route path="necesidades/crear" element={<CrearNecesidadPage />} />
             
             
           </Route>
