@@ -14,3 +14,8 @@ export const getDonacionesByUser = async (userId) => {
   const response = await axiosInstance.get(`/gateway/donaciones/usuario/${userId}`);
   return response.data;
 };
+
+export const actualizarEstadoDonacion = async (donacionId, nuevoEstado) => {
+  const response = await axiosInstance.put(`/gateway/donaciones/${donacionId}/estado`, { estado: nuevoEstado });
+  return response.data;
+};

@@ -8,13 +8,13 @@ const CrearNecesidadPage = () => {
   const { token, usuario } = useAuth();
   const navigate = useNavigate();
 
-  // Corregido: Nombres de atributos en camelCase para que Hibernate los reciba bien
+  // 🚀 CORREGIDO: Inicializado con un Enum real ('ALIMENTO_NO_PERECIBLE') para evitar caídas al enviar por defecto
   const [formData, setFormData] = useState({
     cantidadSolicitada: '',
     descripcion: '',
     region: '',
     ubicacion: '',
-    tipoRecurso: 'ALIMENTO', 
+    tipoRecurso: 'ALIMENTO_NO_PERECIBLE', 
     urgencia: 'MEDIA',        
     estado: 'PENDIENTE'       
   });
@@ -35,7 +35,6 @@ const CrearNecesidadPage = () => {
     setLoading(true);
     setError(null);
 
-    // DTO estructurado con las variables exactas de la entidad asociada a la tabla 'necesidad'
     const necesidadDTO = {
       ...formData,
       cantidadSolicitada: parseInt(formData.cantidadSolicitada, 10),
@@ -43,7 +42,6 @@ const CrearNecesidadPage = () => {
     };
 
     try {
-      // Enviamos el DTO limpio y el token de administrador al servicio
       await crearNecesidad(necesidadDTO, token);
       alert('¡Necesidad crítica reportada con éxito!');
       navigate('/necesidades'); 
@@ -74,11 +72,12 @@ const CrearNecesidadPage = () => {
               onChange={handleChange}
               required
             >
-              <option value="ALIMENTO">Alimento</option>
+              {/* 🚀 CORREGIDO: Mapeo exacto letra por letra con tu enum de Spring Boot */}
+              <option value="ALIMENTO_NO_PERECIBLE">Alimento No Perecible</option>
               <option value="ROPA">Ropa / Abrigo</option>
-              <option value="INSUMOS_MEDICOS">Insumos Médicos</option>
-              <option value="HERRAMIENTAS">Herramientas</option>
-              <option value="AGUA_POTABLE">Agua Potable</option>
+              <option value="INSUMO_MEDICO">Insumo Médico</option>
+              <option value="HIGIENE">Artículos de Higiene</option>
+              <option value="OTRO">Otro / Diferente</option>
             </select>
           </div>
 
@@ -124,21 +123,20 @@ const CrearNecesidadPage = () => {
             </div>
           </div>
 
-           <div className="form-group">
+          <div className="form-group">
             <label htmlFor="urgencia">Nivel de Urgencia</label>
             <select
-                id="urgencia"
-                name="urgencia"
-                value={formData.urgencia}
-                onChange={handleChange}
-                required
+              id="urgencia"
+              name="urgencia"
+              value={formData.urgencia}
+              onChange={handleChange}
+              required
             >
-                <option value="BAJA">Baja</option>
-                <option value="MEDIA">Media</option>
-                <option value="ALTA">Alta / Crítica</option> {/* Cambiado de URGENTE a ALTA */}
+              <option value="BAJA">Baja</option>
+              <option value="MEDIA">Media</option>
+              <option value="ALTA">Alta / Crítica</option>
             </select>
-            </div>
-          
+          </div>
 
           <div className="form-group">
             <label htmlFor="descripcion">Descripción del Requerimiento</label>

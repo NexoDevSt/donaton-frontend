@@ -47,6 +47,13 @@ const Navbar = () => {
         >
           Necesidades
         </a>
+
+        {/* 🚀 NUEVO: Si pasa el parche de Admin, le habilitamos el acceso directo al Dashboard */}
+        {esAdmin && (
+          <Link to="/dashboard" className="nav-link" style={{ fontWeight: 'bold', color: '#E8720C' }}>
+            Panel Admin
+          </Link>
+        )}
         
         {usuario ? (
           <>
