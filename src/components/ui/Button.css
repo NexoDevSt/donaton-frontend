@@ -1,0 +1,17 @@
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary { background-color: var(--color-primary); color: white; }
+.btn-secondary { background-color: var(--color-dark); color: white; }
+.btn-danger { background-color: var(--color-danger); color: white; }

@@ -1,7 +1,17 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  test: {
+    globals: true,           // Activa describe, test y expect globalmente
+    environment: 'jsdom',    // Emula el entorno de navegador (document, window, etc.)
+    setupFiles: './vitest.setup.js', // Apunta al archivo de configuración de abajo
+    coverage: {
+      provider: 'v8',        // Motor de cobertura
+      reporter: ['text', 'json', 'html'], // Formatos de reporte
+      include: ['src/**/*.{js,jsx}'],    // Solo archivos de código fuente
+      exclude: ['src/main.jsx', 'src/App.jsx'], // Excluye puntos de entrada sin lógica
+    },
+  },
+});
